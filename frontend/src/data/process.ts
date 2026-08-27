@@ -38,13 +38,18 @@ export const processSteps: ProcessStep[] = [
 
 export const usps = [
   {
-    title: 'Business-First Technology',
-    description: 'We understand the problem before suggesting the solution. No unnecessary technology, only what your business actually needs.',
-    icon: '💡',
+    title: '100% Guaranteed Solutions',
+    description: 'We don\'t just deliver code; we deliver results. If the solution doesn\'t solve your business problem, we will fix it until it does.',
+    icon: '✅',
+  },
+  {
+    title: 'No.1 Agency in Barabanki',
+    description: 'We are the most trusted, highly-rated technology partner locally. We bring Silicon Valley standards to Barabanki businesses.',
+    icon: '🏆',
   },
   {
     title: 'One Technology Partner',
-    description: 'Website, software, apps, AI, automation — everything under one roof. No need to juggle multiple vendors.',
+    description: 'Website, software, apps, AI, automation — everything under one roof. No need to juggle multiple unreliable vendors.',
     icon: '🤝',
   },
   {
@@ -53,18 +58,13 @@ export const usps = [
     icon: '💬',
   },
   {
-    title: 'Affordable & Professional',
-    description: 'Quality technology at accessible prices. We\'re not the cheapest, but we deliver real value that your business can actually use.',
-    icon: '✨',
-  },
-  {
     title: 'Locally Accessible',
-    description: 'Starting from Barabanki means you can talk to us, meet us and get real support — not just a faceless vendor online.',
+    description: 'Being physically present in Barabanki means you get face-to-face support, real accountability, and zero tension.',
     icon: '📍',
   },
   {
-    title: 'Long-Term Partnership',
-    description: 'We don\'t disappear after delivery. We become your ongoing technology partner — maintenance, improvements and growth.',
+    title: 'Lifetime Partnership',
+    description: 'We don\'t disappear after delivery. We become your ongoing technology partner — ensuring 24/7 uptime, maintenance, and growth.',
     icon: '🔄',
   },
 ];

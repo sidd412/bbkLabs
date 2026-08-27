@@ -38,25 +38,42 @@ export default function Hero() {
               ))}
             </div>
 
+            {/* Trust Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-sm font-semibold mb-4">
+              <span>🏆</span>
+              No. 1 IT & Software Agency in Barabanki
+            </div>
+
             {/* Heading */}
             <div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold font-heading leading-[1.1] tracking-tight">
-                <span className="text-base-50">Your Business.</span>
+                <span className="text-base-50">100% Guaranteed</span>
                 <br />
-                <span className="gradient-text">Our Technology.</span>
+                <span className="gradient-text">Perfect Solutions.</span>
               </h1>
             </div>
 
             {/* Description */}
             <p className="text-lg lg:text-xl text-base-300 max-w-xl leading-relaxed">
-              We build practical technology solutions that help businesses work smarter, reach more customers and grow.
+              We build websites, apps, and software that actually work. 
+              Join the most trusted technology partner in Barabanki and scale your business globally.
             </p>
 
-            {/* Location */}
-            <p className="text-base-400 text-sm flex items-center gap-2">
-              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              Starting in Barabanki, serving businesses with bigger ambitions.
-            </p>
+            {/* Trust Signals */}
+            <div className="flex flex-wrap items-center gap-4 text-sm text-base-400 font-medium">
+              <span className="flex items-center gap-1">
+                <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Guaranteed Results
+              </span>
+              <span className="flex items-center gap-1">
+                <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Local Support
+              </span>
+              <span className="flex items-center gap-1">
+                <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Premium Quality
+              </span>
+            </div>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4">

@@ -4,9 +4,9 @@ import { generateSeo } from '@/lib/seo';
 import { services } from '@/data/services';
 
 export const metadata = generateSeo({
-  title: 'Technology Company in Barabanki — IT, Software, Web Development',
+  title: 'No.1 IT & Software Company in Barabanki — Guaranteed Solutions',
   description:
-    'BBK Labs is a technology company in Barabanki, Uttar Pradesh offering website development, custom software, mobile apps, AI automation and digital growth solutions for local businesses.',
+    'BBK Labs is the most trusted, No.1 technology company in Barabanki. We provide 100% guaranteed website development, custom software, mobile apps, and AI automation.',
   path: '/locations/barabanki',
 });
 
@@ -17,15 +17,15 @@ export default function BarabankiPage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
         <ScrollReveal>
           <div className="max-w-3xl mx-auto text-center">
-            <span className="text-accent-start text-sm font-semibold uppercase tracking-wider">
-              Barabanki, UP
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-sm font-semibold mb-6 uppercase tracking-wider">
+              🏆 No. 1 IT Agency in Barabanki
             </span>
             <h1 className="text-4xl lg:text-5xl font-bold font-heading mt-3 mb-6">
-              Technology Partner for Businesses in{' '}
+              100% Guaranteed Technology Solutions in{' '}
               <span className="gradient-text">Barabanki</span>
             </h1>
             <p className="text-base-300 text-lg leading-relaxed">
-              BBK Labs is a technology company based in Barabanki, Uttar Pradesh. We help local businesses build websites, custom software, mobile apps, AI solutions and grow their digital presence.
+              BBK Labs is the most trusted and highly-rated technology partner in Barabanki, Uttar Pradesh. We help local businesses build high-quality websites, custom software, mobile apps, and AI solutions with a 100% satisfaction guarantee.
             </p>
           </div>
         </ScrollReveal>

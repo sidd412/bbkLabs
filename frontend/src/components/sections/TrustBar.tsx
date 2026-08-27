@@ -7,12 +7,12 @@ export default function TrustBar() {
         <ScrollReveal>
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold font-heading mb-6">
-              Technology That Solves{' '}
-              <span className="gradient-text">Real Business Problems</span>
+              Why We Are The{' '}
+              <span className="gradient-text">No. 1 IT Agency</span> in Barabanki
             </h2>
             <p className="text-base-300 text-lg leading-relaxed">
-              We don&apos;t sell technology for the sake of technology. We understand your
-              business first, then recommend solutions that actually make a difference.
+              We don&apos;t just sell services; we deliver 100% guaranteed perfect solutions. 
+              Our technology is designed to make your business completely tension-free and highly profitable.
             </p>
           </div>
         </ScrollReveal>
@@ -21,22 +21,22 @@ export default function TrustBar() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {[
               {
-                number: '01',
-                title: 'Understand First',
+                number: '100%',
+                title: 'Satisfaction Guaranteed',
                 description:
-                  'We listen to your business challenges before suggesting any technology.',
+                  'We stand by our work. Our solutions are guaranteed to meet your requirements and solve your core business problems.',
               },
               {
-                number: '02',
-                title: 'Build Right',
+                number: 'No.1',
+                title: 'Local Trusted Partner',
                 description:
-                  'We create solutions that fit your business — not force your business to fit the solution.',
+                  'Proudly rooted in Barabanki. We provide face-to-face support and unmatched reliability that freelancers simply cannot offer.',
               },
               {
-                number: '03',
-                title: 'Grow Together',
+                number: '24/7',
+                title: 'Premium Quality',
                 description:
-                  'We stay as your long-term technology partner, evolving the solution as your business grows.',
+                  'We use world-class technologies (like Google Cloud) to ensure your website and apps never go down and run lightning fast.',
               },
             ].map((item, i) => (
               <div
