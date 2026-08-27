@@ -1,0 +1,80 @@
+name: Build and Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: asia-south1
+
+jobs:
+  deploy-backend:
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker gcr.io --quiet
+
+      - name: Build and Push Backend Image
+        working-directory: ./backend
+        run: |
+          IMAGE_NAME="gcr.io/$PROJECT_ID/bbklabs-backend:${{ github.sha }}"
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
+
+      - name: Deploy Backend to Cloud Run
+        run: |
+          gcloud run deploy bbklabs-backend \
+            --image gcr.io/$PROJECT_ID/bbklabs-backend:${{ github.sha }} \
+            --region $REGION \
+            --platform managed \
+            --allow-unauthenticated \
+            --set-env-vars NODE_ENV=production,CORS_ORIGIN=https://bbklabs.com \
+            --set-secrets "MONGO_URI=MONGO_URI:latest"
+
+  deploy-frontend:
+    name: Deploy Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker gcr.io --quiet
+
+      - name: Build and Push Frontend Image
+        working-directory: ./frontend
+        run: |
+          IMAGE_NAME="gcr.io/$PROJECT_ID/bbklabs-frontend:${{ github.sha }}"
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
+
+      - name: Deploy Frontend to Cloud Run
+        run: |
+          gcloud run deploy bbklabs-frontend \
+            --image gcr.io/$PROJECT_ID/bbklabs-frontend:${{ github.sha }} \
+            --region $REGION \
+            --platform managed \
+            --allow-unauthenticated \
+            --set-env-vars NEXT_PUBLIC_API_URL=https://bbklabs-backend-url
