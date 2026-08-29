@@ -144,17 +144,28 @@ export default function ContactForm() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="businessType" className="block text-sm font-medium text-base-300 mb-2">
-                      Business Type
+                      Business Type/Industry
                     </label>
-                    <input
-                      type="text"
+                    <select
                       id="businessType"
                       name="businessType"
                       value={formData.businessType}
                       onChange={handleChange}
                       className="form-input"
-                      placeholder="e.g. School, Clinic, Hotel..."
-                    />
+                    >
+                      <option value="">Select an option</option>
+                      <option value="Education / School">Education / School</option>
+                      <option value="Healthcare / Clinic">Healthcare / Clinic</option>
+                      <option value="Real Estate">Real Estate</option>
+                      <option value="E-commerce / Retail">E-commerce / Retail</option>
+                      <option value="Hospitality / Hotel / Restaurant">Hospitality / Hotel / Restaurant</option>
+                      <option value="Finance / Accounting">Finance / Accounting</option>
+                      <option value="Manufacturing / Industrial">Manufacturing / Industrial</option>
+                      <option value="Technology / IT">Technology / IT</option>
+                      <option value="Agency / Consulting">Agency / Consulting</option>
+                      <option value="Non-Profit / NGO">Non-Profit / NGO</option>
+                      <option value="Other">Other</option>
+                    </select>
                   </div>
                   <div>
                     <label htmlFor="serviceNeeded" className="block text-sm font-medium text-base-300 mb-2">
