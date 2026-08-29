@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IProject extends Document {
   title: string;
   client: string; // Could be a reference to Lead or Contact in the future
+  industry?: string;
   status: 'started' | 'ongoing' | 'completed' | 'on-hold';
   totalRevenue: number;
   advancePaid: number;
@@ -19,6 +20,7 @@ const projectSchema = new Schema<IProject>(
   {
     title: { type: String, required: true, trim: true },
     client: { type: String, required: true, trim: true },
+    industry: { type: String, trim: true },
     status: {
       type: String,
       enum: ['started', 'ongoing', 'completed', 'on-hold'],
