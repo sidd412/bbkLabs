@@ -28,7 +28,7 @@ export default function Leads() {
   const fetchLeads = async () => {
     try {
       const response = await api.get('/leads');
-      setLeads(response.data);
+      setLeads(response.data.data.leads || []);
     } catch (error) {
       console.error('Failed to fetch leads:', error);
     } finally {
