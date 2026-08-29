@@ -3,7 +3,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Portfolio from './pages/Portfolio';
 import PortfolioForm from './pages/PortfolioForm';
-import Layout from './components/Layout';
+
 
 function App() {
   return (
