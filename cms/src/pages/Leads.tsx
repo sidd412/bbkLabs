@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../services/api';
 import Layout from '../components/Layout';
-import { Mail, Phone, Clock, Search, MoreVertical, Building } from 'lucide-react';
+import { Mail, Phone, Clock, Search, MoreVertical, Building, X } from 'lucide-react';
 
 interface Lead {
   _id: string;
@@ -16,10 +16,143 @@ interface Lead {
   createdAt: string;
 }
 
+function ConvertLeadModal({ 
+  lead, 
+  onClose, 
+  onSuccess 
+}: { 
+  lead: Lead, 
+  onClose: () => void, 
+  onSuccess: (leadId: string) => void 
+}) {
+  const [saving, setSaving] = useState(false);
+  const [formData, setFormData] = useState({
+    totalRevenue: 0,
+    advancePaid: 0,
+    deadline: '',
+    maintenanceRenewalDate: '',
+    notes: `Automatically created from lead conversion.\nContact: ${lead.phone} | ${lead.email || ''}\nRequirement: ${lead.requirement || 'N/A'}`
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      // 1. Create project
+      const clientName = lead.businessName || lead.name;
+      const title = `${lead.serviceNeeded.replace(/-/g, ' ')} for ${clientName}`;
+      await api.post('/projects', {
+        title: title.charAt(0).toUpperCase() + title.slice(1),
+        client: clientName,
+        status: 'started',
+        totalRevenue: formData.totalRevenue,
+        advancePaid: formData.advancePaid,
+        services: [lead.serviceNeeded],
+        deadline: formData.deadline || undefined,
+        maintenanceRenewalDate: formData.maintenanceRenewalDate || undefined,
+        notes: formData.notes
+      });
+
+      // 2. Update lead status to converted
+      await api.patch(`/leads/${lead._id}`, { status: 'converted' });
+      
+      onSuccess(lead._id);
+    } catch (error) {
+      console.error('Failed to convert lead:', error);
+      alert('Failed to convert lead and create project.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center p-6 border-b border-gray-100">
+          <h2 className="text-xl font-bold text-gray-900">Convert Lead to Project</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <p className="text-sm text-gray-500 mb-4">
+            You are converting <strong>{lead.name}</strong> into an active project. Please provide the financial and timeline details to initialize the project tracker.
+          </p>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Total Cost (₹) *</label>
+              <input
+                required
+                type="number"
+                value={formData.totalRevenue}
+                onChange={e => setFormData({...formData, totalRevenue: Number(e.target.value)})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Advance Paid (₹) *</label>
+              <input
+                required
+                type="number"
+                value={formData.advancePaid}
+                onChange={e => setFormData({...formData, advancePaid: Number(e.target.value)})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Deadline</label>
+              <input
+                type="date"
+                value={formData.deadline}
+                onChange={e => setFormData({...formData, deadline: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Maintenance Renewal</label>
+              <input
+                type="date"
+                value={formData.maintenanceRenewalDate}
+                onChange={e => setFormData({...formData, maintenanceRenewalDate: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Internal Notes</label>
+            <textarea
+              rows={3}
+              value={formData.notes}
+              onChange={e => setFormData({...formData, notes: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div className="pt-4 flex justify-end gap-3">
+            <button type="button" onClick={onClose} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-colors">
+              Cancel
+            </button>
+            <button disabled={saving} type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50">
+              {saving ? 'Creating Project...' : 'Convert to Project'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export default function Leads() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [convertingLead, setConvertingLead] = useState<Lead | null>(null);
 
   useEffect(() => {
     fetchLeads();
@@ -36,13 +169,24 @@ export default function Leads() {
     }
   };
 
-  const updateStatus = async (id: string, status: string) => {
+  const handleStatusSelect = async (lead: Lead, status: string) => {
+    if (status === 'converted' && lead.status !== 'converted') {
+      setConvertingLead(lead);
+      return;
+    }
+    
+    // Normal update for other statuses
     try {
-      await api.patch(`/leads/${id}`, { status });
-      setLeads(leads.map(l => l._id === id ? { ...l, status: status as any } : l));
+      await api.patch(`/leads/${lead._id}`, { status });
+      setLeads(leads.map(l => l._id === lead._id ? { ...l, status: status as any } : l));
     } catch (error) {
       console.error('Failed to update status', error);
     }
+  };
+
+  const handleConversionSuccess = (leadId: string) => {
+    setLeads(leads.map(l => l._id === leadId ? { ...l, status: 'converted' } : l));
+    setConvertingLead(null);
   };
 
   const filteredLeads = leads.filter(l => 
@@ -136,7 +280,7 @@ export default function Leads() {
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="font-medium text-gray-900">{lead.serviceNeeded.replace('-', ' ')}</div>
+                      <div className="font-medium text-gray-900">{lead.serviceNeeded.replace(/-/g, ' ')}</div>
                       {lead.requirement && (
                         <div className="text-xs text-gray-500 truncate max-w-[200px] mt-1" title={lead.requirement}>
                           {lead.requirement}
@@ -146,7 +290,7 @@ export default function Leads() {
                     <td className="px-6 py-4">
                       <select 
                         value={lead.status}
-                        onChange={(e) => updateStatus(lead._id, e.target.value)}
+                        onChange={(e) => handleStatusSelect(lead, e.target.value)}
                         className="text-sm bg-transparent border-none cursor-pointer focus:ring-0"
                       >
                         <option value="new">New</option>
@@ -175,6 +319,14 @@ export default function Leads() {
           </div>
         )}
       </div>
+
+      {convertingLead && (
+        <ConvertLeadModal 
+          lead={convertingLead} 
+          onClose={() => setConvertingLead(null)} 
+          onSuccess={handleConversionSuccess} 
+        />
+      )}
     </Layout>
   );
 }

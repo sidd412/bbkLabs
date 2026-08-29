@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import Layout from '../components/Layout';
-import { Plus, Pencil, Trash2, IndianRupee, Clock, Building } from 'lucide-react';
+import { Plus, Pencil, Trash2, IndianRupee, Clock, Building, Megaphone, X } from 'lucide-react';
 
 interface Project {
   _id: string;
@@ -14,11 +14,159 @@ interface Project {
   startDate: string;
   deadline?: string;
   maintenanceRenewalDate?: string;
+  services?: string[];
+}
+
+function PublishCaseStudyModal({ 
+  project, 
+  onClose, 
+  onSuccess 
+}: { 
+  project: Project, 
+  onClose: () => void, 
+  onSuccess: () => void 
+}) {
+  const [saving, setSaving] = useState(false);
+  const [formData, setFormData] = useState({
+    title: project.title,
+    client: project.client,
+    industry: project.services?.[0]?.replace(/-/g, ' ') || 'Technology',
+    challenge: '',
+    solution: '',
+    results: '',
+    coverImage: ''
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      const slug = formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      await api.post('/case-studies', {
+        ...formData,
+        slug,
+        published: true
+      });
+      onSuccess();
+    } catch (error) {
+      console.error('Failed to publish case study:', error);
+      alert('Failed to publish case study.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center p-6 border-b border-gray-100">
+          <h2 className="text-xl font-bold text-gray-900">Publish as Case Study</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <p className="text-sm text-gray-500 mb-4">
+            Create a public case study for <strong>{project.title}</strong> to showcase your work on the website.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Public Title *</label>
+              <input
+                required
+                type="text"
+                value={formData.title}
+                onChange={e => setFormData({...formData, title: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Client Name *</label>
+              <input
+                required
+                type="text"
+                value={formData.client}
+                onChange={e => setFormData({...formData, client: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Industry *</label>
+              <input
+                required
+                type="text"
+                value={formData.industry}
+                onChange={e => setFormData({...formData, industry: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Cover Image URL</label>
+              <input
+                type="text"
+                value={formData.coverImage}
+                onChange={e => setFormData({...formData, coverImage: e.target.value})}
+                placeholder="https://..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">The Challenge *</label>
+            <textarea
+              required
+              rows={3}
+              value={formData.challenge}
+              onChange={e => setFormData({...formData, challenge: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Our Solution *</label>
+            <textarea
+              required
+              rows={3}
+              value={formData.solution}
+              onChange={e => setFormData({...formData, solution: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">The Results</label>
+            <textarea
+              rows={2}
+              value={formData.results}
+              onChange={e => setFormData({...formData, results: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div className="pt-4 flex justify-end gap-3">
+            <button type="button" onClick={onClose} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-colors">
+              Cancel
+            </button>
+            <button disabled={saving} type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50">
+              {saving ? 'Publishing...' : 'Publish to Website'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 }
 
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [publishingProject, setPublishingProject] = useState<Project | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -133,6 +281,13 @@ export default function Projects() {
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end space-x-2">
                         <button 
+                          onClick={() => setPublishingProject(project)}
+                          title="Publish as Case Study"
+                          className="text-gray-400 hover:text-green-600 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                          <Megaphone className="h-4 w-4" />
+                        </button>
+                        <button 
                           onClick={() => navigate(`/projects/edit/${project._id}`)} 
                           className="text-gray-400 hover:text-blue-500 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                         >
@@ -153,6 +308,18 @@ export default function Projects() {
           </div>
         )}
       </div>
+
+      {publishingProject && (
+        <PublishCaseStudyModal
+          project={publishingProject}
+          onClose={() => setPublishingProject(null)}
+          onSuccess={() => {
+            setPublishingProject(null);
+            alert('Case study successfully published to the website!');
+            navigate('/portfolio');
+          }}
+        />
+      )}
     </Layout>
   );
 }
