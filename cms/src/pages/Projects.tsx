@@ -32,6 +32,7 @@ function PublishCaseStudyModal({
     client: project.client,
     industry: project.services?.[0]?.replace(/-/g, ' ') || 'Technology',
     challenge: '',
+    approach: '',
     solution: '',
     results: '',
     coverImage: ''
@@ -43,7 +44,14 @@ function PublishCaseStudyModal({
     try {
       const slug = formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
       await api.post('/case-studies', {
-        ...formData,
+        title: formData.title,
+        client: formData.client,
+        industry: formData.industry,
+        challenge: formData.challenge,
+        approach: formData.approach,
+        solution: formData.solution,
+        result: formData.results, // Backend expects 'result'
+        featuredImage: formData.coverImage,
         slug,
         published: true
       });
@@ -121,9 +129,20 @@ function PublishCaseStudyModal({
             <label className="block text-sm font-medium text-gray-700 mb-1">The Challenge *</label>
             <textarea
               required
-              rows={3}
+              rows={2}
               value={formData.challenge}
               onChange={e => setFormData({...formData, challenge: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Our Approach *</label>
+            <textarea
+              required
+              rows={2}
+              value={formData.approach}
+              onChange={e => setFormData({...formData, approach: e.target.value})}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -132,7 +151,7 @@ function PublishCaseStudyModal({
             <label className="block text-sm font-medium text-gray-700 mb-1">Our Solution *</label>
             <textarea
               required
-              rows={3}
+              rows={2}
               value={formData.solution}
               onChange={e => setFormData({...formData, solution: e.target.value})}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -140,8 +159,9 @@ function PublishCaseStudyModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">The Results</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">The Results *</label>
             <textarea
+              required
               rows={2}
               value={formData.results}
               onChange={e => setFormData({...formData, results: e.target.value})}
@@ -163,10 +183,45 @@ function PublishCaseStudyModal({
   );
 }
 
+function DeleteConfirmModal({ title, onClose, onConfirm }: { title: string, onClose: () => void, onConfirm: () => void }) {
+  const [input, setInput] = useState('');
+  const [deleting, setDeleting] = useState(false);
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Confirm Deletion</h2>
+        <p className="text-sm text-gray-600 mb-4">
+          Are you sure you want to delete <strong>{title}</strong>? This action cannot be undone.
+        </p>
+        <p className="text-sm text-gray-600 mb-2">Type <strong>DELETE</strong> to confirm.</p>
+        <input 
+          type="text" 
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="DELETE"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 mb-6"
+        />
+        <div className="flex justify-end gap-3">
+          <button onClick={onClose} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium">Cancel</button>
+          <button 
+            disabled={input !== 'DELETE' || deleting} 
+            onClick={async () => { setDeleting(true); await onConfirm(); }}
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium disabled:opacity-50"
+          >
+            {deleting ? 'Deleting...' : 'Delete Permanently'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [publishingProject, setPublishingProject] = useState<Project | null>(null);
+  const [deletingProject, setDeletingProject] = useState<Project | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -184,13 +239,15 @@ export default function Projects() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm('Are you sure you want to delete this project?')) return;
+  const handleDeleteSuccess = async () => {
+    if (!deletingProject) return;
     try {
-      await api.delete(`/projects/${id}`);
+      await api.delete(`/projects/${deletingProject._id}`);
       fetchProjects();
+      setDeletingProject(null);
     } catch (error) {
       console.error('Failed to delete:', error);
+      alert('Failed to delete project.');
     }
   };
 
@@ -294,7 +351,7 @@ export default function Projects() {
                           <Pencil className="h-4 w-4" />
                         </button>
                         <button 
-                          onClick={() => handleDelete(project._id)} 
+                          onClick={() => setDeletingProject(project)} 
                           className="text-gray-400 hover:text-red-500 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -318,6 +375,14 @@ export default function Projects() {
             alert('Case study successfully published to the website!');
             navigate('/portfolio');
           }}
+        />
+      )}
+
+      {deletingProject && (
+        <DeleteConfirmModal
+          title={deletingProject.title}
+          onClose={() => setDeletingProject(null)}
+          onConfirm={handleDeleteSuccess}
         />
       )}
     </Layout>
