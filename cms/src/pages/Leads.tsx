@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import api from '../services/api';
 import Layout from '../components/Layout';
-import { Mail, Phone, Clock, Search, MoreVertical, Building, X, Upload, Trash2 } from 'lucide-react';
+import { Mail, Phone, Clock, Search, MoreVertical, Building, X, Upload, Trash2, Plus, Filter } from 'lucide-react';
 
 interface Lead {
   _id: string;
@@ -18,6 +18,118 @@ interface Lead {
 }
 
 const STATUS_ORDER = ['new', 'contacted', 'in-progress', 'converted', 'closed'];
+
+const SERVICE_OPTIONS = [
+  { value: 'website', label: 'Website' },
+  { value: 'software', label: 'Software' },
+  { value: 'mobile-app', label: 'Mobile App' },
+  { value: 'ai-automation', label: 'AI / Automation' },
+  { value: 'seo-digital-growth', label: 'SEO / Digital Growth' },
+  { value: 'business-automation', label: 'Business Automation' },
+  { value: 'not-sure', label: 'Not sure' },
+  { value: 'other', label: 'Other' },
+];
+
+const BUSINESS_TYPE_OPTIONS = [
+  "Education / School",
+  "Healthcare / Clinic",
+  "Real Estate",
+  "E-commerce / Retail",
+  "Hospitality / Hotel / Restaurant",
+  "Finance / Accounting",
+  "Manufacturing / Industrial",
+  "Technology / IT",
+  "Agency / Consulting",
+  "Non-Profit / NGO",
+  "Other"
+];
+
+function CreateLeadModal({ onClose, onSuccess }: { onClose: () => void, onSuccess: () => void }) {
+  const [saving, setSaving] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    businessName: '',
+    phone: '',
+    email: '',
+    businessType: '',
+    serviceNeeded: 'website',
+    requirement: '',
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      await api.post('/leads', formData);
+      onSuccess();
+    } catch (error) {
+      console.error('Failed to create lead:', error);
+      alert('Failed to create lead.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center p-6 border-b border-gray-100">
+          <h2 className="text-xl font-bold text-gray-900">Create New Lead</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+              <input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
+              <input type="text" value={formData.businessName} onChange={e => setFormData({...formData, businessName: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
+              <input required type="text" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Business Type</label>
+              <select value={formData.businessType} onChange={e => setFormData({...formData, businessType: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <option value="">Select</option>
+                {BUSINESS_TYPE_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Service Needed *</label>
+              <select required value={formData.serviceNeeded} onChange={e => setFormData({...formData, serviceNeeded: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                {SERVICE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+              </select>
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Requirement</label>
+            <textarea rows={3} value={formData.requirement} onChange={e => setFormData({...formData, requirement: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div className="pt-4 flex justify-end gap-3">
+            <button type="button" onClick={onClose} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-colors">Cancel</button>
+            <button disabled={saving} type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50">
+              {saving ? 'Creating...' : 'Create Lead'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
 
 function ConvertLeadModal({ 
   lead, 
@@ -241,11 +353,17 @@ function UploadCSVModal({ onClose, onSuccess }: { onClose: () => void, onSuccess
 export default function Leads() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
   
+  // Filters
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [businessTypeFilter, setBusinessTypeFilter] = useState('');
+  const [dateFilter, setDateFilter] = useState('');
+
   const [convertingLead, setConvertingLead] = useState<Lead | null>(null);
   const [deletingLead, setDeletingLead] = useState<Lead | null>(null);
   const [showCSVModal, setShowCSVModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -304,11 +422,23 @@ export default function Leads() {
     }
   };
 
-  const filteredLeads = leads.filter(l => 
-    l.name.toLowerCase().includes(search.toLowerCase()) || 
-    (l.businessName && l.businessName.toLowerCase().includes(search.toLowerCase())) ||
-    l.phone.includes(search)
-  );
+  const filteredLeads = leads.filter(l => {
+    const matchesSearch = l.name.toLowerCase().includes(search.toLowerCase()) || 
+      (l.businessName && l.businessName.toLowerCase().includes(search.toLowerCase())) ||
+      l.phone.includes(search);
+    
+    const matchesStatus = statusFilter ? l.status === statusFilter : true;
+    const matchesType = businessTypeFilter ? l.businessType === businessTypeFilter : true;
+    
+    let matchesDate = true;
+    if (dateFilter) {
+      const leadDate = new Date(l.createdAt).toLocaleDateString();
+      const filterDate = new Date(dateFilter).toLocaleDateString();
+      matchesDate = leadDate === filterDate;
+    }
+
+    return matchesSearch && matchesStatus && matchesType && matchesDate;
+  });
 
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
@@ -328,29 +458,86 @@ export default function Leads() {
           <h1 className="text-2xl font-bold text-gray-900">Leads Management</h1>
           <p className="text-gray-500 mt-1">Manage and track your incoming client inquiries.</p>
         </div>
-        <button
-          onClick={() => setShowCSVModal(true)}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-        >
-          <Upload className="-ml-1 mr-2 h-4 w-4" />
-          Upload CSV
-        </button>
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => setShowCSVModal(true)}
+            className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+          >
+            <Upload className="-ml-1 mr-2 h-4 w-4" />
+            Upload CSV
+          </button>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="-ml-1 mr-2 h-4 w-4" />
+            Create Lead
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-6 p-4 flex flex-wrap items-center gap-4">
+        <div className="flex items-center text-sm font-medium text-gray-700 border-r pr-4">
+          <Filter className="w-4 h-4 mr-2" />
+          Filters
+        </div>
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input 
+            type="text" 
+            placeholder="Search leads..." 
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="w-40">
+          <select 
+            value={statusFilter} 
+            onChange={e => setStatusFilter(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">All Statuses</option>
+            {STATUS_ORDER.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
+          </select>
+        </div>
+        <div className="w-48">
+          <select 
+            value={businessTypeFilter} 
+            onChange={e => setBusinessTypeFilter(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">All Business Types</option>
+            {BUSINESS_TYPE_OPTIONS.map(t => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </div>
+        <div className="w-40">
+          <input 
+            type="date"
+            value={dateFilter}
+            onChange={e => setDateFilter(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        {(search || statusFilter || businessTypeFilter || dateFilter) && (
+          <button 
+            onClick={() => {
+              setSearch('');
+              setStatusFilter('');
+              setBusinessTypeFilter('');
+              setDateFilter('');
+            }}
+            className="text-sm text-red-600 hover:text-red-700 font-medium"
+          >
+            Clear All
+          </button>
+        )}
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50/50">
-          <div className="relative w-72">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input 
-              type="text" 
-              placeholder="Search leads by name, business, or phone..." 
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
           <div className="text-sm text-gray-500">
-            Total Leads: {filteredLeads.length}
+            Showing {filteredLeads.length} leads
           </div>
         </div>
 
@@ -362,7 +549,7 @@ export default function Leads() {
               <Mail className="w-6 h-6 text-gray-400" />
             </div>
             <p className="font-medium text-gray-900">No leads found</p>
-            <p className="text-sm mt-1">Wait for clients to submit the contact form.</p>
+            <p className="text-sm mt-1">Try adjusting your filters or add a new lead.</p>
           </div>
         ) : (
           <div className="overflow-x-visible min-h-[400px]">
@@ -473,6 +660,16 @@ export default function Leads() {
           </div>
         )}
       </div>
+
+      {showCreateModal && (
+        <CreateLeadModal 
+          onClose={() => setShowCreateModal(false)}
+          onSuccess={() => {
+            setShowCreateModal(false);
+            fetchLeads();
+          }}
+        />
+      )}
 
       {convertingLead && (
         <ConvertLeadModal 
