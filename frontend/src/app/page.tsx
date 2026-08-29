@@ -7,6 +7,7 @@ import WhyBBKLabs from '@/components/sections/WhyBBKLabs';
 import LocalSection from '@/components/sections/LocalSection';
 import ProblemSolution from '@/components/sections/ProblemSolution';
 import PricingOverview from '@/components/sections/PricingOverview';
+import MaintenancePackages from '@/components/sections/MaintenancePackages';
 import FAQSection from '@/components/sections/FAQSection';
 import CTASection from '@/components/sections/CTASection';
 import ContactForm from '@/components/sections/ContactForm';
@@ -31,6 +32,7 @@ export default function Home() {
       <ProblemSolution />
       <LocalSection />
       <PricingOverview />
+      <MaintenancePackages />
       <FAQSection />
       <ContactForm />
       <CTASection />
