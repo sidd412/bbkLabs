@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { CaseStudy } from './caseStudy.model.js';
+import { requireAuth, requireAdmin } from '../../middleware/auth.js';
 
 const router = Router();
 
@@ -35,7 +36,7 @@ router.get('/:slug', async (req, res, next) => {
 });
 
 // Admin — create
-router.post('/', async (req, res, next) => {
+router.post('/', requireAuth, requireAdmin, async (req, res, next) => {
   try {
     const caseStudy = new CaseStudy(req.body);
     await caseStudy.save();
@@ -46,7 +47,7 @@ router.post('/', async (req, res, next) => {
 });
 
 // Admin — update
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', requireAuth, requireAdmin, async (req, res, next) => {
   try {
     const caseStudy = await CaseStudy.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!caseStudy) {
@@ -60,7 +61,7 @@ router.put('/:id', async (req, res, next) => {
 });
 
 // Admin — delete
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', requireAuth, requireAdmin, async (req, res, next) => {
   try {
     await CaseStudy.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: 'Case study deleted' });

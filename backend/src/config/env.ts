@@ -10,6 +10,7 @@ const envSchema = z.object({
   CORS_ORIGIN: z.string().default('http://localhost:3000'),
   RATE_LIMIT_WINDOW_MS: z.string().default('900000'),
   RATE_LIMIT_MAX: z.string().default('100'),
+  JWT_SECRET: z.string().default('bbklabs-secret-key-development-only'),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -26,4 +27,5 @@ export const env = {
   corsOrigin: parsed.data.CORS_ORIGIN,
   rateLimitWindowMs: parseInt(parsed.data.RATE_LIMIT_WINDOW_MS, 10),
   rateLimitMax: parseInt(parsed.data.RATE_LIMIT_MAX, 10),
+  jwtSecret: parsed.data.JWT_SECRET,
 } as const;

@@ -11,6 +11,8 @@ import contactRoutes from './modules/contacts/contact.routes.js';
 import caseStudyRoutes from './modules/case-studies/caseStudy.routes.js';
 import blogRoutes from './modules/blog/post.routes.js';
 import newsletterRoutes from './modules/newsletter/newsletter.routes.js';
+import authRoutes from './modules/auth/auth.routes.js';
+import projectRoutes from './modules/projects/project.routes.js';
 
 const app = express();
 
@@ -29,6 +31,8 @@ app.get('/api/health', (_req, res) => {
 });
 
 // API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/projects', projectRoutes);
 app.use('/api/leads', leadRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/case-studies', caseStudyRoutes);
