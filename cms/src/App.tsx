@@ -4,6 +4,8 @@ import Dashboard from './pages/Dashboard';
 import Portfolio from './pages/Portfolio';
 import PortfolioForm from './pages/PortfolioForm';
 import Leads from './pages/Leads';
+import Projects from './pages/Projects';
+import ProjectForm from './pages/ProjectForm';
 
 
 function App() {
@@ -16,6 +18,9 @@ function App() {
         {/* Protected Dashboard Routes */}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/leads" element={<Leads />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/projects/new" element={<ProjectForm />} />
+        <Route path="/projects/edit/:id" element={<ProjectForm />} />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/portfolio/new" element={<PortfolioForm />} />
         <Route path="/portfolio/edit/:id" element={<PortfolioForm />} />
