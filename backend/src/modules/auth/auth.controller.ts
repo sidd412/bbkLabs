@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { User } from './auth.model';
+import { User } from './auth.model.js';
 import jwt from 'jsonwebtoken';
-import { env } from '../../config/env';
+import { env } from '../../config/env.js';
 import { z } from 'zod';
 
 const loginSchema = z.object({
@@ -53,7 +53,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Temp function to create initial admin. In production, this should be removed or highly secured.
-export const setupInitialAdmin = async (req: Request, res: Response): Promise<void> => {
+export const setupInitialAdmin = async (_req: Request, res: Response): Promise<void> => {
   try {
     const adminExists = await User.findOne({ role: 'admin' });
     if (adminExists) {

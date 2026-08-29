@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { Project } from './project.model';
-import { requireAuth } from '../../middleware/auth';
+import { Project } from './project.model.js';
+import { requireAuth } from '../../middleware/auth.js';
 import { z } from 'zod';
 
 const router = Router();
@@ -22,7 +22,7 @@ const projectSchema = z.object({
 });
 
 // GET all projects
-router.get('/', async (req: Request, res: Response): Promise<void> => {
+router.get('/', async (_req: Request, res: Response): Promise<void> => {
   try {
     const projects = await Project.find().sort({ createdAt: -1 });
     res.json(projects);
@@ -48,7 +48,7 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
 });
 
 // GET dashboard stats (Projects specific)
-router.get('/stats', async (req: Request, res: Response): Promise<void> => {
+router.get('/stats', async (_req: Request, res: Response): Promise<void> => {
   try {
     const totalProjects = await Project.countDocuments();
     const activeProjects = await Project.countDocuments({ status: { $in: ['started', 'ongoing'] } });
