@@ -28,7 +28,7 @@ export default function Projects() {
   const fetchProjects = async () => {
     try {
       const response = await api.get('/projects');
-      setProjects(response.data.data || []);
+      setProjects(response.data || []);
     } catch (error) {
       console.error('Failed to fetch projects:', error);
     } finally {
