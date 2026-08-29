@@ -12,7 +12,7 @@ router.get('/', async (req, res, next) => {
     const skip = (page - 1) * limit;
     const filter = req.query.all === 'true' ? {} : { published: true };
     const [caseStudies, total] = await Promise.all([
-      CaseStudy.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+      CaseStudy.find(filter).sort({ order: 1, createdAt: -1 }).skip(skip).limit(limit),
       CaseStudy.countDocuments(filter),
     ]);
     res.json({ success: true, data: { caseStudies, total, page, totalPages: Math.ceil(total / limit) } });

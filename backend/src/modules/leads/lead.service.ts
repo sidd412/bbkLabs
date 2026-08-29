@@ -28,3 +28,7 @@ export async function updateLeadStatus(id: string, status: string) {
 
   return lead;
 }
+
+export async function deleteLead(id: string) {
+  return Lead.findByIdAndDelete(id);
+}

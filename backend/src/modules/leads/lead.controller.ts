@@ -14,6 +14,19 @@ export async function create(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function createBatch(req: Request, res: Response, next: NextFunction) {
+  try {
+    if (!Array.isArray(req.body.leads)) {
+      res.status(400).json({ success: false, error: 'Expected leads array' });
+      return;
+    }
+    const created = await Promise.all(req.body.leads.map((l: any) => leadService.createLead(l)));
+    res.status(201).json({ success: true, count: created.length });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
     const page = parseInt(req.query.page as string) || 1;
@@ -46,6 +59,15 @@ export async function updateStatus(req: Request, res: Response, next: NextFuncti
       return;
     }
     res.json({ success: true, data: lead });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function deleteLead(req: Request, res: Response, next: NextFunction) {
+  try {
+    await leadService.deleteLead(req.params.id as string);
+    res.json({ success: true, message: 'Lead deleted' });
   } catch (error) {
     next(error);
   }
