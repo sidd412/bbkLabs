@@ -158,6 +158,7 @@ function ConvertLeadModal({
       await api.post('/projects', {
         title: title.charAt(0).toUpperCase() + title.slice(1),
         client: clientName,
+        industry: lead.businessType || 'Other',
         status: 'started',
         totalRevenue: formData.totalRevenue,
         advancePaid: formData.advancePaid,
