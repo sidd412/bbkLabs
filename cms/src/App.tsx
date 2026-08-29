@@ -3,6 +3,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Portfolio from './pages/Portfolio';
 import PortfolioForm from './pages/PortfolioForm';
+import Leads from './pages/Leads';
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         
         {/* Protected Dashboard Routes */}
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/leads" element={<Leads />} />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/portfolio/new" element={<PortfolioForm />} />
         <Route path="/portfolio/edit/:id" element={<PortfolioForm />} />
