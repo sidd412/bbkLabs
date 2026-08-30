@@ -7,9 +7,9 @@ export const siteConfig = {
   ogImage: '/og-image.png',
 
   contact: {
-    phone: '+91XXXXXXXXXX',
-    whatsapp: '+91XXXXXXXXXX',
-    email: 'hello@bbklabs.com',
+    phone: '+919129054029',
+    whatsapp: '+919129054029',
+    email: 'siddharthaverma6213@gmail.com',
     address: 'Barabanki, Uttar Pradesh, India',
   },
 
