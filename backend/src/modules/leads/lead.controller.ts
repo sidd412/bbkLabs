@@ -1,9 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
 import * as leadService from './lead.service.js';
+import { emailService } from '../../utils/email.js';
+import { whatsappService } from '../../utils/whatsapp.js';
 
 export async function create(req: Request, res: Response, next: NextFunction) {
   try {
     const lead = await leadService.createLead(req.body);
+    
+    // Trigger alerts asynchronously
+    Promise.all([
+      emailService.sendAdminAlert(req.body),
+      emailService.sendClientWelcome(req.body.email, req.body.name),
+      whatsappService.sendAdminAlert(req.body.name, req.body.serviceNeeded, req.body.phone),
+      whatsappService.sendClientWelcome(req.body.phone, req.body.name)
+    ]).catch(err => console.error('Alerts failed:', err));
+
     res.status(201).json({
       success: true,
       message: 'Thank you! We will get back to you shortly.',
