@@ -6,6 +6,7 @@ import PortfolioForm from './pages/PortfolioForm';
 import Leads from './pages/Leads';
 import Projects from './pages/Projects';
 import ProjectForm from './pages/ProjectForm';
+import Testimonials from './pages/Testimonials';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/portfolio/new" element={<PortfolioForm />} />
         <Route path="/portfolio/edit/:id" element={<PortfolioForm />} />
+        <Route path="/testimonials" element={<Testimonials />} />
       </Routes>
     </Router>
   );

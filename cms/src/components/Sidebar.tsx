@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Users, Briefcase, FolderKanban, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, Briefcase, FolderKanban, LogOut, MessageSquare } from 'lucide-react';
 
 export default function Sidebar() {
   const location = useLocation();
@@ -10,6 +10,7 @@ export default function Sidebar() {
     { name: 'Leads', path: '/leads', icon: Users },
     { name: 'Projects', path: '/projects', icon: FolderKanban },
     { name: 'Portfolio', path: '/portfolio', icon: Briefcase },
+    { name: 'Testimonials', path: '/testimonials', icon: MessageSquare },
   ];
 
   const handleLogout = () => {
