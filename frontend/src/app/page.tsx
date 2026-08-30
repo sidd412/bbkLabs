@@ -11,6 +11,7 @@ import MaintenancePackages from '@/components/sections/MaintenancePackages';
 import FAQSection from '@/components/sections/FAQSection';
 import CTASection from '@/components/sections/CTASection';
 import ContactForm from '@/components/sections/ContactForm';
+import TestimonialsSlider from '@/components/sections/TestimonialsSlider';
 import { faqSchema } from '@/lib/schema';
 import { faqs } from '@/data/faqs';
 
@@ -31,6 +32,7 @@ export default function Home() {
       <WhyBBKLabs />
       <ProblemSolution />
       <LocalSection />
+      <TestimonialsSlider />
       <PricingOverview />
       <MaintenancePackages />
       <FAQSection />

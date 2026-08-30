@@ -53,6 +53,10 @@ export const api = {
   getCaseStudy: (slug: string) =>
     request(`/case-studies/${slug}`),
 
+  getTestimonials: async () => {
+    return request('/testimonials');
+  },
+
   // Blog
   getBlogPosts: (page = 1, category?: string) =>
     request(`/blog?page=${page}${category ? `&category=${category}` : ''}`),
