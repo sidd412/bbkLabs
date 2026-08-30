@@ -7,8 +7,8 @@ export default function MaintenancePackages() {
       price: '₹999',
       duration: '/month',
       features: [
-        'Free Premium Hosting',
-        'SSL Certificate',
+        'Up to 100-500 hits/day',
+        'Free Hosting & SSL',
         'Weekly Backups',
         'Security Monitoring',
         '2 Minor Updates/mo',
@@ -16,28 +16,40 @@ export default function MaintenancePackages() {
       popular: false,
     },
     {
-      title: 'Business Pro',
-      price: '₹2,499',
+      title: 'Growth Plan',
+      price: '₹1,999',
       duration: '/month',
       features: [
-        'Everything in Basic',
+        'Up to 500-2000 hits/day',
+        'Weekly Backups',
         'Priority Support',
-        'Daily Backups',
-        'Performance Optimization',
-        '5 Content Updates/mo',
-        'Basic SEO Monitoring',
+        '3 Content Updates/mo',
+        'Free Hosting & SSL',
       ],
       popular: true,
+    },
+    {
+      title: 'Business Pro',
+      price: '₹2,999',
+      duration: '/month',
+      features: [
+        'Up to 1500-3000 hits/day',
+        'Everything in Growth',
+        'SEO & Performance',
+        '5 Content Updates/mo',
+        'Daily Backups',
+      ],
+      popular: false,
     },
     {
       title: 'Custom ERP/App',
       price: 'Custom',
       duration: '/month',
       features: [
+        '3000+ daily hits',
         'Dedicated Server Management',
         '24/7 Priority Support',
         'Database Optimization',
-        'Feature Enhancements',
         'Bug Fixes & Patching',
       ],
       popular: false,
@@ -62,7 +74,7 @@ export default function MaintenancePackages() {
           </div>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {packages.map((pkg, idx) => (
             <ScrollReveal key={pkg.title} delay={idx * 150}>
               <div
