@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import Layout from '../components/Layout';
-import { Plus, Edit2, Trash2, Star, CheckCircle, XCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, Star } from 'lucide-react';
 
 interface Testimonial {
   _id: string;

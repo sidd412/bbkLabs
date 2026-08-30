@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import api from '../services/api';
 import Layout from '../components/Layout';
-import { Mail, Phone, Clock, Search, MoreVertical, Building, X, Upload, Trash2, Plus, Filter } from 'lucide-react';
+import { Mail, Phone, Clock, Search, MoreVertical, Building, X, Upload, Trash2, Plus, Filter, Send } from 'lucide-react';
 
 interface Lead {
   _id: string;
@@ -262,6 +262,68 @@ function DeleteConfirmModal({ title, onClose, onConfirm }: { title: string, onCl
   );
 }
 
+function OutreachModal({ onClose, leadIds, leadCount }: { onClose: () => void, leadIds: string[], leadCount: number }) {
+  const [saving, setSaving] = useState(false);
+  const [formData, setFormData] = useState({
+    subject: '',
+    message: ''
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (leadCount === 0) {
+      alert("No leads selected. Adjust your filters to include at least one lead with an email address.");
+      return;
+    }
+    if (!window.confirm(`Are you sure you want to send this email to ${leadCount} leads?`)) return;
+    
+    setSaving(true);
+    try {
+      await api.post('/leads/outreach', { ...formData, leadIds });
+      alert(`Successfully triggered outreach for ${leadCount} leads.`);
+      onClose();
+    } catch (error) {
+      console.error('Failed to send outreach:', error);
+      alert('Failed to send outreach.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full">
+        <div className="flex justify-between items-center p-6 border-b border-gray-100">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900">Bulk Outreach</h2>
+            <p className="text-sm text-gray-500 mt-1">Send a promotional email to {leadCount} filtered leads.</p>
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email Subject *</label>
+            <input required type="text" value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="e.g. Special Diwali Offer from BBK Labs" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Message Body *</label>
+            <textarea required rows={8} value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm" placeholder="Type your email content here. HTML tags are not needed, line breaks will be preserved automatically." />
+          </div>
+          <div className="pt-4 flex justify-end gap-3">
+            <button type="button" onClick={onClose} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-colors">Cancel</button>
+            <button disabled={saving || leadCount === 0} type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 inline-flex items-center">
+              <Send className="w-4 h-4 mr-2" />
+              {saving ? 'Sending...' : `Send to ${leadCount} Leads`}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 function UploadCSVModal({ onClose, onSuccess }: { onClose: () => void, onSuccess: () => void }) {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -364,6 +426,7 @@ export default function Leads() {
   const [convertingLead, setConvertingLead] = useState<Lead | null>(null);
   const [deletingLead, setDeletingLead] = useState<Lead | null>(null);
   const [showCSVModal, setShowCSVModal] = useState(false);
+  const [showOutreachModal, setShowOutreachModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
@@ -460,6 +523,13 @@ export default function Leads() {
           <p className="text-gray-500 mt-1">Manage and track your incoming client inquiries.</p>
         </div>
         <div className="flex items-center space-x-3">
+          <button
+            onClick={() => setShowOutreachModal(true)}
+            className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+          >
+            <Send className="-ml-1 mr-2 h-4 w-4" />
+            Bulk Outreach
+          </button>
           <button
             onClick={() => setShowCSVModal(true)}
             className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
@@ -696,6 +766,14 @@ export default function Leads() {
             fetchLeads();
             alert('Leads successfully imported!');
           }}
+        />
+      )}
+
+      {showOutreachModal && (
+        <OutreachModal
+          onClose={() => setShowOutreachModal(false)}
+          leadIds={filteredLeads.filter(l => !!l.email).map(l => l._id)}
+          leadCount={filteredLeads.filter(l => !!l.email).length}
         />
       )}
     </Layout>
