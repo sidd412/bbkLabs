@@ -3,8 +3,6 @@ import * as leadController from './lead.controller.js';
 import { validate } from '../../middleware/validate.js';
 import { createLeadSchema } from './lead.validation.js';
 import { formLimiter } from '../../middleware/rateLimiter.js';
-import { emailService } from '../../utils/email.js';
-import { whatsappService } from '../../utils/whatsapp.js';
 
 const router = Router();
 

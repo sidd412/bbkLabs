@@ -13,7 +13,7 @@ import blogRoutes from './modules/blog/post.routes.js';
 import newsletterRoutes from './modules/newsletter/newsletter.routes.js';
 import authRoutes from './modules/auth/auth.routes.js';
 import projectRoutes from './modules/projects/project.routes.js';
-import testimonialRoutes from './modules/testimonials/testimonial.routes.js';
+import { testimonialRoutes } from './modules/testimonials/testimonial.routes.js';
 
 const app = express();
 
