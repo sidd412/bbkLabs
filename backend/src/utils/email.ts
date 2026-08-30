@@ -99,5 +99,35 @@ export const emailService = {
       console.error('Error sending client welcome email:', error);
       return false;
     }
+  },
+
+  sendBulkOutreach: async (emails: string[], subject: string, htmlContent: string) => {
+    if (!transporter) {
+      console.warn('Email credentials missing. Skipping bulk outreach.');
+      return { success: false, error: 'Email credentials missing' };
+    }
+
+    let successCount = 0;
+    let failCount = 0;
+
+    // Send emails individually to avoid massive BCC spam triggers and allow personalization later
+    for (const email of emails) {
+      try {
+        const mailOptions = {
+          from: `"BBK Labs" <${emailUser}>`,
+          to: email,
+          subject: subject,
+          html: htmlContent
+        };
+        await transporter.sendMail(mailOptions);
+        successCount++;
+      } catch (error) {
+        console.error(`Failed to send outreach to ${email}:`, error);
+        failCount++;
+      }
+    }
+
+    console.log(`Bulk outreach completed: ${successCount} successful, ${failCount} failed.`);
+    return { success: true, successCount, failCount };
   }
 };

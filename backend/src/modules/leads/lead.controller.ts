@@ -83,3 +83,47 @@ export async function deleteLead(req: Request, res: Response, next: NextFunction
     next(error);
   }
 }
+
+export async function sendOutreach(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { subject, message, leadIds } = req.body;
+    
+    if (!subject || !message || !Array.isArray(leadIds) || leadIds.length === 0) {
+      res.status(400).json({ success: false, error: 'Missing subject, message, or leadIds' });
+      return;
+    }
+
+    // Fetch leads to get their emails
+    const leads = await leadService.getLeads(1, 10000); // Fetch a large number to ensure we get them all
+    const validLeads = leads.leads.filter(l => leadIds.includes(l._id.toString()) && !!l.email);
+    const emails = validLeads.map(l => l.email!);
+
+    if (emails.length === 0) {
+      res.status(400).json({ success: false, error: 'No valid emails found for selected leads' });
+      return;
+    }
+
+    // Wrap the message in a professional template
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.6; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px;">
+        ${message.replace(/\n/g, '<br/>')}
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
+        <p>Best Regards,</p>
+        <p style="margin-bottom: 5px;"><strong>Team BBK Labs</strong></p>
+        <p style="margin-top: 0; color: #64748b; font-size: 14px;"><em>(Building your business via tech)</em></p>
+        <p style="margin-top: 15px; font-size: 12px; color: #9ca3af;">You are receiving this email because you previously inquired about our services.</p>
+      </div>
+    `;
+
+    // Trigger bulk sending asynchronously so we don't block the response
+    emailService.sendBulkOutreach(emails, subject, htmlContent).catch(err => console.error('Bulk outreach failed:', err));
+
+    res.json({ 
+      success: true, 
+      message: `Outreach triggered for ${emails.length} leads. Emails are being sent in the background.`,
+      targetCount: emails.length
+    });
+  } catch (error) {
+    next(error);
+  }
+}

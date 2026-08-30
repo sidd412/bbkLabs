@@ -11,6 +11,7 @@ router.post('/', formLimiter, validate(createLeadSchema), leadController.create)
 
 // Admin routes (to be protected later)
 router.post('/batch', leadController.createBatch);
+router.post('/outreach', leadController.sendOutreach);
 router.get('/', leadController.getAll);
 router.get('/:id', leadController.getById);
 router.patch('/:id/status', leadController.updateStatus);
