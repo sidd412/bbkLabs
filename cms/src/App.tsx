@@ -7,6 +7,7 @@ import Leads from './pages/Leads';
 import Projects from './pages/Projects';
 import ProjectForm from './pages/ProjectForm';
 import Testimonials from './pages/Testimonials';
+import Invoice from './pages/Invoice';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/projects/new" element={<ProjectForm />} />
         <Route path="/projects/edit/:id" element={<ProjectForm />} />
+        <Route path="/projects/invoice/:id" element={<Invoice />} />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/portfolio/new" element={<PortfolioForm />} />
         <Route path="/portfolio/edit/:id" element={<PortfolioForm />} />

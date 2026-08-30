@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import Layout from '../components/Layout';
-import { Plus, Pencil, Trash2, IndianRupee, Clock, Building, Megaphone, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, IndianRupee, Clock, Building, Megaphone, X, FileText } from 'lucide-react';
 
 interface Project {
   _id: string;
@@ -345,7 +345,15 @@ export default function Projects() {
                           <Megaphone className="h-4 w-4" />
                         </button>
                         <button 
+                          onClick={() => window.open(`/projects/invoice/${project._id}`, '_blank')}
+                          title="View Invoice / Receipt"
+                          className="text-gray-400 hover:text-purple-600 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                          <FileText className="h-4 w-4" />
+                        </button>
+                        <button 
                           onClick={() => navigate(`/projects/edit/${project._id}`)} 
+                          title="Edit Project"
                           className="text-gray-400 hover:text-blue-500 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                         >
                           <Pencil className="h-4 w-4" />
