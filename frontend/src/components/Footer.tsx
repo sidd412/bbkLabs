@@ -10,7 +10,7 @@ export default function Footer() {
     <footer className="bg-base-900 border-t border-base-800/50">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block mb-4">
@@ -81,6 +81,31 @@ export default function Footer() {
                   View All →
                 </Link>
               </li>
+            </ul>
+          </div>
+
+          {/* Locations */}
+          <div>
+            <h3 className="text-base-100 font-heading font-semibold mb-5 text-sm uppercase tracking-wider">
+              Locations
+            </h3>
+            <ul className="space-y-3">
+              {[
+                { name: 'Lucknow', slug: 'lucknow' },
+                { name: 'Kanpur', slug: 'kanpur' },
+                { name: 'Allahabad', slug: 'allahabad' },
+                { name: 'Ayodhya', slug: 'ayodhya' },
+                { name: 'Barabanki', slug: 'barabanki' },
+              ].map((city) => (
+                <li key={city.slug}>
+                  <Link
+                    href={`/locations/${city.slug}`}
+                    className="text-base-400 hover:text-base-100 transition-colors text-sm"
+                  >
+                    {city.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

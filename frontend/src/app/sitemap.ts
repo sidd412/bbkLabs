@@ -15,8 +15,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE_URL}/case-studies`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE_URL}/resources`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${BASE_URL}/locations/barabanki`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
   ];
+
+  const cityPages: MetadataRoute.Sitemap = ['lucknow', 'kanpur', 'allahabad', 'ayodhya', 'barabanki'].map((city) => ({
+    url: `${BASE_URL}/locations/${city}`,
+    lastModified: now,
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }));
 
   const servicePages: MetadataRoute.Sitemap = services.map((s) => ({
     url: `${BASE_URL}${s.href}`,
@@ -32,5 +38,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...servicePages, ...industryPages];
+  return [...staticPages, ...cityPages, ...servicePages, ...industryPages];
 }
