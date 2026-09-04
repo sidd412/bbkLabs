@@ -55,7 +55,7 @@ export default function Hero() {
 
             {/* Description */}
             <p className="text-lg lg:text-xl text-base-300 max-w-xl leading-relaxed">
-              We build practical technology solutions that help businesses work smarter, reach more customers, and grow. Starting in Barabanki, serving businesses with bigger ambitions.
+              We build practical technology solutions that help businesses work smarter, reach more customers, and grow. Starting in Lucknow & Barabanki, serving businesses across Uttar Pradesh.
             </p>
 
             {/* Trust Signals */}

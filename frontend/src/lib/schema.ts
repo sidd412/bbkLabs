@@ -5,6 +5,7 @@ export function organizationSchema() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: siteConfig.name,
+    legalName: siteConfig.legalName,
     url: siteConfig.url,
     logo: `${siteConfig.url}/logo.png`,
     description: siteConfig.description,
@@ -31,6 +32,7 @@ export function localBusinessSchema() {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
     name: siteConfig.name,
+    legalName: siteConfig.legalName,
     url: siteConfig.url,
     telephone: siteConfig.contact.phone,
     email: siteConfig.contact.email,
@@ -57,6 +59,7 @@ export function localBusinessSchema() {
       },
     ],
     areaServed: [
+      { '@type': 'City', name: 'Lucknow' },
       { '@type': 'City', name: 'Barabanki' },
       { '@type': 'State', name: 'Uttar Pradesh' },
     ],

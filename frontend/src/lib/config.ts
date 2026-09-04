@@ -1,5 +1,6 @@
 export const siteConfig = {
   name: 'BBK Labs',
+  legalName: 'BBK Technologies',
   tagline: 'Your Business. Our Technology.',
   description:
     'We build websites, software, mobile apps, AI solutions and business automation that help businesses work smarter and grow faster.',
@@ -10,7 +11,7 @@ export const siteConfig = {
     phone: '+919129054029',
     whatsapp: '+919129054029',
     email: 'siddharthaverma6213@gmail.com',
-    address: 'Barabanki, Uttar Pradesh, India',
+    address: 'Lucknow & Barabanki, Uttar Pradesh, India',
   },
 
   whatsappMessage:
@@ -38,22 +39,22 @@ export const siteConfig = {
   },
 
   seo: {
-    defaultTitle: 'BBK Labs — Technology Solutions for Businesses in Barabanki',
+    defaultTitle: 'BBK Labs — Technology Solutions for Businesses in Lucknow & UP',
     titleTemplate: '%s | BBK Labs',
     defaultDescription:
-      'We build practical technology solutions including websites, custom software, mobile apps, and business automation. Starting in Barabanki, helping businesses work smarter and grow.',
+      'We build practical technology solutions including websites, custom software, mobile apps, and business automation. Starting in Lucknow & Barabanki, helping businesses across Uttar Pradesh work smarter and grow.',
     keywords: [
+      'technology company in Lucknow',
+      'software company in Lucknow',
+      'website development company in Lucknow',
       'technology company in Barabanki',
       'software company in Barabanki',
-      'website development company in Barabanki',
-      'custom software development Barabanki',
-      'mobile app development company Barabanki',
-      'business automation Barabanki',
-      'IT company in Barabanki',
-      'school software Barabanki',
-      'clinic software Barabanki',
-      'real estate CRM Barabanki',
+      'IT company in Uttar Pradesh',
+      'custom software development UP',
+      'mobile app development company Lucknow',
+      'business automation Lucknow',
       'BBK Labs',
+      'BBK Technologies',
     ] as string[],
   },
 
