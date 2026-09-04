@@ -7,12 +7,12 @@ export default function TrustBar() {
         <ScrollReveal>
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold font-heading mb-6">
-              Why We Are The{' '}
-              <span className="gradient-text">No. 1 IT Agency</span> in Barabanki
+              A Trusted Technology Partner for{' '}
+              <span className="gradient-text">Local Businesses</span>
             </h2>
             <p className="text-base-300 text-lg leading-relaxed">
-              We don&apos;t just sell services; we deliver 100% guaranteed perfect solutions. 
-              Our technology is designed to make your business completely tension-free and highly profitable.
+              We don&apos;t just sell technology; we solve business problems. 
+              Our solutions are designed to help you streamline operations, reach more customers, and scale sustainably.
             </p>
           </div>
         </ScrollReveal>
@@ -21,22 +21,22 @@ export default function TrustBar() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {[
               {
+                number: '5+',
+                title: 'Business Clients',
+                description:
+                  'We have already partnered with ambitious local businesses to modernize their operations and improve their digital presence.',
+              },
+              {
+                number: '15+',
+                title: 'Successful Projects',
+                description:
+                  'From custom websites to business automation, we have successfully delivered over 15 projects tailored to specific business needs.',
+              },
+              {
                 number: '100%',
-                title: 'Satisfaction Guaranteed',
+                title: 'Local Support',
                 description:
-                  'We stand by our work. Our solutions are guaranteed to meet your requirements and solve your core business problems.',
-              },
-              {
-                number: 'No.1',
-                title: 'Local Trusted Partner',
-                description:
-                  'Proudly rooted in Barabanki. We provide face-to-face support and unmatched reliability that freelancers simply cannot offer.',
-              },
-              {
-                number: '24/7',
-                title: 'Premium Quality',
-                description:
-                  'We use world-class technologies (like Google Cloud) to ensure your website and apps never go down and run lightning fast.',
+                  'Proudly rooted in Barabanki. We provide direct, transparent communication and unmatched reliability that freelancers cannot offer.',
               },
             ].map((item, i) => (
               <div
