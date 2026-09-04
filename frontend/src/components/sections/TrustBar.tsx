@@ -36,7 +36,7 @@ export default function TrustBar() {
                 number: '100%',
                 title: 'Local Support',
                 description:
-                  'Proudly rooted in Barabanki. We provide direct, transparent communication and unmatched reliability that freelancers cannot offer.',
+                  'Proudly rooted in Uttar Pradesh. We provide direct, transparent communication and unmatched reliability that freelancers cannot offer.',
               },
             ].map((item, i) => (
               <div
